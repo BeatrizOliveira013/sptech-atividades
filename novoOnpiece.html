@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Piece</title>
+</head>
+<body>
+<h1>Assistir Episódios de One Piece</h1>
+
+    <!--Passo 1: Solicitar ao usuário o episódio desejado--> 
+    Episodio que deseja começar assistindo:<input id="input_episodioDesejado"><br>
+        <!--Passo 2: Solicitar ao usuário o tempo disponível--> 
+    Quantidade de tempo  disponível:<input id="input_tempoDisponivel"><br>
+    <!--Passo 3: Solicitar ao usuário a unidade de tempo--> 
+    Unidade de tempo em: <select id="select_unidadeTempo">
+        <option>Selecione uma opção</option>
+        <option value="horas">Horas</option>
+        <option value="minutos">Minutos</option>
+    </select><br>
+    <!--Passo 4: Solicitar ao usuário se irá pular a opening--> 
+    Pular abertura?<select id="select_pularAbertura">
+        <option>Selecione uma opção</option>
+        <option value="sim">Sim</option>
+        <option value="nao">Não</option>
+    </select><br>
+     <!--Passo 5: Solicitar ao usuário se irá pular a ending--> 
+    Pular encerramento?<select id="select_pularEncerramento">
+        <option>Selecione uma opção</option>
+        <option value="sim">Sim</option>
+        <option value="nao">Não</option>
+    </select><br>
+    <!--Passo 6: Criar botão que chama a função assistir quando clicado-->
+    <button onclick="assistir()">Assistir episódios</button><br>
+     <!--Passo 7: Div que irá sair as mensagens-->
+    <div id="div_output"></div>
+
+
+
+<script>
+
+
+// Função principal
+function assistir() {
+
+    let episodioDesejado = Number(input_episodioDesejado.value);
+    let tempoDisponivel = Number(input_tempoDisponivel.value);
+    let unidadeTempo = select_unidadeTempo.value;
+    let pularAbertura = select_pularAbertura.value;
+    let pularEncerramento = select_pularEncerramento.value;
+
+    // Passo 4: Validar o número do episódio
+    if(episodioDesejado < 1 || episodioDesejado > 1100){
+            alert('O número do episódio é inválido, One Piece só tem de 1 à 1100 episódios!');
+        }
+
+    // Passo 5: Calcular o tempo total do episódio com base nas escolhas do usuário
+    let tempoEpisodio = 24; // Tempo padrão do episódio completo
+    if (pularAbertura && pularEncerramento) {
+        tempoEpisodio = 20;
+    } else if (pularAbertura || pularEncerramento) {
+        tempoEpisodio = 22;
+    }
+
+    if (unidadeTempo === "horas") {
+        tempoDisponivel *= 60; // Convertendo horas para minutos
+    }
+
+    // Passo 6: Exibir as informações dos episódios assistidos
+    let episodiosAssistidos = 0;
+   
+    for (let episodioAtual = episodioDesejado; tempoDisponivel > 0; episodioAtual++, episodiosAssistidos++) {
+        if (tempoDisponivel > 0) {
+            div_output.innerHTML += `Episódio: ${episodioAtual}<br>`;
+
+            for (let minuto = 1; minuto <= tempoEpisodio && tempoDisponivel > 0; minuto++, tempoDisponivel--) {
+                let status;
+                if (minuto <= 2 && pularAbertura == 'nao') {
+                    status = "Abertura do Episódio";
+                } else if (minuto > 2 && minuto <= 22) {
+                    status = "Assistindo o Episódio";
+                } else if (minuto > 22 && minuto <= 24 && pularEncerramento =='nao') {
+                    status = "Encerramento do Episódio";
+                }
+                div_output.innerHTML += `Minuto: ${minuto} ${status}<br>`;
+            }
+        }
+    }
+    div_output.innerHTML += `Fim dos episódios<br>`;
+    // Passo 7: Contabilizar o número de episódios assistidos
+    div_output.innerHTML += `Você assistiu  ${episodiosAssistidos} episódio(s).`;
+    
+}
+
+
+</script>
+
+</body>
+</html>
